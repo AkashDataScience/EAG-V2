@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icon Generator - Smart Paper & Doc Summarizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2563eb;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .icon-preview {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .icon-size {
+            text-align: center;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: #f9fafb;
+        }
+        .icon-size h3 {
+            margin: 0 0 10px 0;
+            color: #374151;
+        }
+        canvas {
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+        }
+        .download-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .download-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: background-color 0.2s;
+        }
+        .download-btn:hover {
+            background: #1d4ed8;
+        }
+        .instructions {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #92400e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Smart Paper & Doc Summarizer - Icon Generator</h1>
+        
+        <div class="instructions">
+            <h3>📋 Instructions:</h3>
+            <ol>
+                <li>Click the download buttons below to save each icon size</li>
+                <li>Save them in the <code>icons/</code> folder with the correct names</li>
+                <li>Make sure the files are named: <code>icon16.png</code>, <code>icon32.png</code>, <code>icon48.png</code>, <code>icon128.png</code></li>
+                <li>Reload your Chrome extension to see the new icons</li>
+            </ol>
+        </div>
+
+        <div class="icon-preview">
+            <div class="icon-size">
+                <h3>16x16</h3>
+                <canvas id="icon16" width="16" height="16"></canvas>
+            </div>
+            <div class="icon-size">
+                <h3>32x32</h3>
+                <canvas id="icon32" width="32" height="32"></canvas>
+            </div>
+            <div class="icon-size">
+                <h3>48x48</h3>
+                <canvas id="icon48" width="48" height="48"></canvas>
+            </div>
+            <div class="icon-size">
+                <h3>128x128</h3>
+                <canvas id="icon128" width="128" height="128"></canvas>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <h3>📥 Download Icons:</h3>
+            <button class="download-btn" onclick="downloadIcon(16)">Download 16x16</button>
+            <button class="download-btn" onclick="downloadIcon(32)">Download 32x32</button>
+            <button class="download-btn" onclick="downloadIcon(48)">Download 48x48</button>
+            <button class="download-btn" onclick="downloadIcon(128)">Download 128x128</button>
+        </div>
+    </div>
+
+    <script>
+        // SVG content
+        const svgContent = `
+            <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Background circle -->
+                <circle cx="64" cy="64" r="60" fill="#2563eb" stroke="#1e40af" stroke-width="4"/>
+                
+                <!-- Document icon -->
+                <rect x="32" y="24" width="48" height="64" rx="4" fill="white"/>
+                
+                <!-- Document lines -->
+                <rect x="40" y="36" width="32" height="3" rx="1.5" fill="#2563eb"/>
+                <rect x="40" y="44" width="28" height="3" rx="1.5" fill="#2563eb"/>
+                <rect x="40" y="52" width="32" height="3" rx="1.5" fill="#2563eb"/>
+                <rect x="40" y="60" width="24" height="3" rx="1.5" fill="#2563eb"/>
+                <rect x="40" y="68" width="30" height="3" rx="1.5" fill="#2563eb"/>
+                
+                <!-- AI/Magic sparkle -->
+                <circle cx="88" cy="40" r="6" fill="#fbbf24"/>
+                <path d="M88 32L90 36L94 36L91 39L92 43L88 40L84 43L85 39L82 36L86 36L88 32Z" fill="#f59e0b"/>
+                
+                <!-- Magnifying glass -->
+                <circle cx="100" cy="100" r="12" fill="none" stroke="white" stroke-width="3"/>
+                <line x1="108" y1="108" x2="116" y2="116" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                
+                <!-- Small dots for AI processing -->
+                <circle cx="24" cy="88" r="2" fill="#fbbf24"/>
+                <circle cx="32" cy="88" r="2" fill="#fbbf24"/>
+                <circle cx="40" cy="88" r="2" fill="#fbbf24"/>
+            </svg>
+        `;
+
+        // Function to draw icon on canvas
+        function drawIcon(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Create image from SVG
+            const img = new Image();
+            const svgBlob = new Blob([svgContent], {type: 'image/svg+xml'});
+            const url = URL.createObjectURL(svgBlob);
+            
+            img.onload = function() {
+                ctx.clearRect(0, 0, size, size);
+                ctx.drawImage(img, 0, 0, size, size);
+                URL.revokeObjectURL(url);
+            };
+            
+            img.src = url;
+        }
+
+        // Function to download icon
+        function downloadIcon(size) {
+            const canvas = document.getElementById(`icon${size}`);
+            const link = document.createElement('a');
+            link.download = `icon${size}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // Initialize all icons
+        window.onload = function() {
+            drawIcon('icon16', 16);
+            drawIcon('icon32', 32);
+            drawIcon('icon48', 48);
+            drawIcon('icon128', 128);
+        };
+    </script>
+</body>
+</html>

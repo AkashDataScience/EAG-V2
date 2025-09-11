@@ -1,0 +1,35 @@
+{
+  "name": "smart-paper-doc-summarizer",
+  "version": "1.0.0",
+  "description": "AI-powered research paper and document summarizer with structured research proposal generation",
+  "main": "popup.js",
+  "scripts": {
+    "build": "echo 'Building Chrome extension...'",
+    "test": "echo 'Testing extension functionality...'",
+    "lint": "echo 'Linting code...'",
+    "package": "zip -r smart-paper-summarizer.zip . -x '*.git*' 'node_modules/*' '*.md' 'package*.json'"
+  },
+  "keywords": [
+    "chrome-extension",
+    "ai",
+    "research",
+    "summarization",
+    "openai",
+    "pdf",
+    "document-analysis"
+  ],
+  "author": "The School of AI - EAG V2",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^2.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theschoolofai/eag-v2"
+  },
+  "bugs": {
+    "url": "https://github.com/theschoolofai/eag-v2/issues"
+  },
+  "homepage": "https://theschoolof.ai/"
+}

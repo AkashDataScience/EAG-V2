@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Paper & Doc Summarizer</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="pdf.min.js"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="w-96 h-128 overflow-y-auto">
+        <!-- Header -->
+        <div class="gradient-bg text-white p-4">
+            <h1 class="text-lg font-bold">Smart Paper & Doc Summarizer</h1>
+            <p class="text-sm opacity-90">AI-powered research analysis</p>
+        </div>
+
+        <!-- API Key Configuration -->
+        <div id="apiKeySection" class="p-4 border-b border-gray-200">
+            <div class="flex items-center justify-between mb-2">
+                <label class="text-sm font-medium text-gray-700">Google AI API Key</label>
+                <button id="toggleApiKey" class="text-blue-600 text-xs hover:underline">
+                    <span id="toggleText">Show</span>
+                </button>
+            </div>
+            <input 
+                type="password" 
+                id="apiKeyInput" 
+                placeholder="AIza..." 
+                class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+            <button id="saveApiKey" class="mt-2 w-full bg-blue-600 text-white py-2 px-4 rounded-md text-sm hover:bg-blue-700 transition-colors">
+                Save API Key
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <div id="mainContent" class="p-4" style="display: none;">
+            <!-- Content Input Section -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Content Source</label>
+                <div class="space-y-2">
+                    <button id="useCurrentPage" class="w-full bg-green-600 text-white py-2 px-4 rounded-md text-sm hover:bg-green-700 transition-colors">
+                        📄 Use Current Page
+                    </button>
+                    <button id="uploadPdf" class="w-full bg-purple-600 text-white py-2 px-4 rounded-md text-sm hover:bg-purple-700 transition-colors">
+                        📎 Upload PDF
+                    </button>
+                    <input type="file" id="pdfInput" accept=".pdf" style="display: none;">
+                </div>
+                <div class="mt-3">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Or paste content manually:</label>
+                    <textarea 
+                        id="contentInput" 
+                        rows="4" 
+                        placeholder="Paste your document content here..."
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- Focus Mode Selection -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Focus Mode</label>
+                <select id="focusMode" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="technical">🔬 Technical</option>
+                    <option value="legal">⚖️ Legal</option>
+                    <option value="privacy">🔒 Privacy</option>
+                    <option value="biometrics">👤 Biometrics</option>
+                </select>
+            </div>
+
+            <!-- Action Button -->
+            <button id="summarizeBtn" class="w-full bg-blue-600 text-white py-3 px-4 rounded-md font-medium hover:bg-blue-700 transition-colors mb-4">
+                <span id="summarizeText">🚀 Summarize & Generate Research Steps</span>
+                <div id="loadingSpinner" class="loading-spinner mx-auto mt-2" style="display: none;"></div>
+            </button>
+
+            <!-- Results Section -->
+            <div id="resultsSection" class="space-y-3" style="display: none;">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-gray-800">Research Analysis</h3>
+                    <div class="space-x-2">
+                        <button id="copyResults" class="bg-gray-600 text-white px-3 py-1 rounded text-xs hover:bg-gray-700">
+                            📋 Copy
+                        </button>
+                        <button id="exportMarkdown" class="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700">
+                            📄 MD
+                        </button>
+                        <button id="exportPdf" class="bg-red-600 text-white px-3 py-1 rounded text-xs hover:bg-red-700">
+                            📑 PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 1: Research Problem -->
+                <div class="collapsible bg-white border border-gray-200 rounded-lg">
+                    <button class="collapsible-header w-full px-4 py-3 text-left font-medium text-gray-800 hover:bg-gray-50 flex justify-between items-center">
+                        <span>Step 1: Research Problem</span>
+                        <span class="text-gray-500">▼</span>
+                    </button>
+                    <div class="collapsible-content px-4 pb-3">
+                        <div id="step1Content" class="text-sm text-gray-700"></div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Research Design -->
+                <div class="collapsible bg-white border border-gray-200 rounded-lg">
+                    <button class="collapsible-header w-full px-4 py-3 text-left font-medium text-gray-800 hover:bg-gray-50 flex justify-between items-center">
+                        <span>Step 2: Research Design</span>
+                        <span class="text-gray-500">▼</span>
+                    </button>
+                    <div class="collapsible-content px-4 pb-3">
+                        <div id="step2Content" class="text-sm text-gray-700"></div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Data Collection -->
+                <div class="collapsible bg-white border border-gray-200 rounded-lg">
+                    <button class="collapsible-header w-full px-4 py-3 text-left font-medium text-gray-800 hover:bg-gray-50 flex justify-between items-center">
+                        <span>Step 3: Data Collection</span>
+                        <span class="text-gray-500">▼</span>
+                    </button>
+                    <div class="collapsible-content px-4 pb-3">
+                        <div id="step3Content" class="text-sm text-gray-700"></div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Sampling Strategies -->
+                <div class="collapsible bg-white border border-gray-200 rounded-lg">
+                    <button class="collapsible-header w-full px-4 py-3 text-left font-medium text-gray-800 hover:bg-gray-50 flex justify-between items-center">
+                        <span>Step 4: Sampling Strategies</span>
+                        <span class="text-gray-500">▼</span>
+                    </button>
+                    <div class="collapsible-content px-4 pb-3">
+                        <div id="step4Content" class="text-sm text-gray-700"></div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Research Proposal -->
+                <div class="collapsible bg-white border border-gray-200 rounded-lg">
+                    <button class="collapsible-header w-full px-4 py-3 text-left font-medium text-gray-800 hover:bg-gray-50 flex justify-between items-center">
+                        <span>Step 5: Research Proposal</span>
+                        <span class="text-gray-500">▼</span>
+                    </button>
+                    <div class="collapsible-content px-4 pb-3">
+                        <div id="step5Content" class="text-sm text-gray-700"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Display -->
+            <div id="errorSection" class="bg-red-50 border border-red-200 rounded-md p-3 mt-4" style="display: none;">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <span class="text-red-400">⚠️</span>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-red-800">Error</h3>
+                        <div id="errorMessage" class="mt-1 text-sm text-red-700"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

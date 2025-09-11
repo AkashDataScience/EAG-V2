@@ -1,0 +1,27 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="60" fill="#2563eb" stroke="#1e40af" stroke-width="4"/>
+  
+  <!-- Document icon -->
+  <rect x="32" y="24" width="48" height="64" rx="4" fill="white"/>
+  
+  <!-- Document lines -->
+  <rect x="40" y="36" width="32" height="3" rx="1.5" fill="#2563eb"/>
+  <rect x="40" y="44" width="28" height="3" rx="1.5" fill="#2563eb"/>
+  <rect x="40" y="52" width="32" height="3" rx="1.5" fill="#2563eb"/>
+  <rect x="40" y="60" width="24" height="3" rx="1.5" fill="#2563eb"/>
+  <rect x="40" y="68" width="30" height="3" rx="1.5" fill="#2563eb"/>
+  
+  <!-- AI/Magic sparkle -->
+  <circle cx="88" cy="40" r="6" fill="#fbbf24"/>
+  <path d="M88 32L90 36L94 36L91 39L92 43L88 40L84 43L85 39L82 36L86 36L88 32Z" fill="#f59e0b"/>
+  
+  <!-- Magnifying glass -->
+  <circle cx="100" cy="100" r="12" fill="none" stroke="white" stroke-width="3"/>
+  <line x1="108" y1="108" x2="116" y2="116" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Small dots for AI processing -->
+  <circle cx="24" cy="88" r="2" fill="#fbbf24"/>
+  <circle cx="32" cy="88" r="2" fill="#fbbf24"/>
+  <circle cx="40" cy="88" r="2" fill="#fbbf24"/>
+</svg>
