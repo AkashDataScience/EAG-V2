@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Mindflow",
+  "version": "1.0.0",
+  "description": "Create, configure, and run multiple AI agents that work together in workflows",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://generativelanguage.googleapis.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Mindflow"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["roles.json"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

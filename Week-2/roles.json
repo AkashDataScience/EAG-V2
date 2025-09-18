@@ -1,0 +1,123 @@
+{
+  "roles": [
+    {
+      "id": "scraper",
+      "name": "Scraper",
+      "description": "Extract and structure information from content",
+      "defaultPrompt": "You are a data scraper agent. Extract key information, data points, and structure them in a clear, organized format. Focus on accuracy and completeness.",
+      "defaultInputType": "page_scrape",
+      "category": "data"
+    },
+    {
+      "id": "summarizer",
+      "name": "Summarizer",
+      "description": "Create concise summaries of content",
+      "defaultPrompt": "You are a summarization agent. Create clear, concise summaries that capture the main points and key insights. Maintain the essential meaning while reducing length.",
+      "defaultInputType": "text",
+      "category": "analysis"
+    },
+    {
+      "id": "analyzer",
+      "name": "Analyzer",
+      "description": "Analyze content and provide insights",
+      "defaultPrompt": "You are an analysis agent. Examine the content deeply, identify patterns, trends, and provide actionable insights. Include recommendations where appropriate.",
+      "defaultInputType": "previous_output",
+      "category": "analysis"
+    },
+    {
+      "id": "compliance",
+      "name": "Compliance Checker",
+      "description": "Check content for compliance and regulatory issues",
+      "defaultPrompt": "You are a compliance checking agent. Review content for regulatory compliance, policy adherence, and potential issues. Highlight any concerns and suggest corrections.",
+      "defaultInputType": "text",
+      "category": "validation"
+    },
+    {
+      "id": "researcher",
+      "name": "Researcher",
+      "description": "Conduct research and fact-checking",
+      "defaultPrompt": "You are a research agent. Verify facts, find supporting evidence, and identify areas that need further investigation. Provide credible sources when possible.",
+      "defaultInputType": "text",
+      "category": "research"
+    },
+    {
+      "id": "translator",
+      "name": "Translator",
+      "description": "Translate content between languages",
+      "defaultPrompt": "You are a translation agent. Translate content accurately while preserving meaning, tone, and context. Maintain professional quality and cultural sensitivity.",
+      "defaultInputType": "text",
+      "category": "language"
+    }
+  ],
+  "inputTypes": [
+    {
+      "id": "text",
+      "name": "Text Input",
+      "description": "Direct text input from user",
+      "handler": "handleTextInput",
+      "requiresPermission": false
+    },
+    {
+      "id": "page_scrape",
+      "name": "Page Scrape",
+      "description": "Content scraped from current webpage",
+      "handler": "handlePageScrape",
+      "requiresPermission": true
+    },
+    {
+      "id": "previous_output",
+      "name": "Previous Agent Output",
+      "description": "Output from the previous agent in sequence",
+      "handler": "handlePreviousOutput",
+      "requiresPermission": false
+    },
+    {
+      "id": "file_upload",
+      "name": "File Upload",
+      "description": "Content from uploaded file",
+      "handler": "handleFileUpload",
+      "requiresPermission": false
+    },
+    {
+      "id": "clipboard",
+      "name": "Clipboard Content",
+      "description": "Content from system clipboard",
+      "handler": "handleClipboard",
+      "requiresPermission": true
+    },
+    {
+      "id": "api_call",
+      "name": "API Call",
+      "description": "Data fetched from external API",
+      "handler": "handleApiCall",
+      "requiresPermission": true
+    }
+  ],
+  "categories": [
+    {
+      "id": "data",
+      "name": "Data Processing",
+      "color": "blue"
+    },
+    {
+      "id": "analysis",
+      "name": "Analysis",
+      "color": "green"
+    },
+    {
+      "id": "validation",
+      "name": "Validation",
+      "color": "red"
+    },
+    {
+      "id": "research",
+      "name": "Research",
+      "color": "purple"
+    },
+    {
+      "id": "language",
+      "name": "Language",
+      "color": "yellow"
+    }
+  ]
+}
