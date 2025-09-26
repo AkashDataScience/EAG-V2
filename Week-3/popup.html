@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock News + Price Correlator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📈 Stock News Correlator</h1>
+            <p class="subtitle">AI-powered sentiment & price analysis</p>
+        </div>
+
+        <!-- Natural Language Query Section -->
+        <div class="query-section">
+            <div class="input-group">
+                <label class="input-label">🤖 Ask me anything about stocks</label>
+                <textarea 
+                    id="naturalQuery" 
+                    rows="3"
+                    placeholder="e.g., 'Analyze TCS stock sentiment for the last week' or 'Check correlation between Infosys news and price movements'"
+                    class="query-input"
+                ></textarea>
+                <div class="input-hint">
+                    💡 Try: "Analyze TCS stock sentiment for the last week" or "Check correlation between Infosys news and price movements"
+                </div>
+            </div>
+
+            <button id="analyzeBtn" class="btn btn-primary">
+                🚀 Analyze with AI Agent
+            </button>
+            
+            <!-- Quick Examples -->
+            <div class="examples-section">
+                <div class="examples-label">Quick Examples:</div>
+                <div class="examples-buttons">
+                    <button class="example-btn" data-query="Analyze TCS stock sentiment for the last week">
+                        TCS Sentiment
+                    </button>
+                    <button class="example-btn" data-query="Check correlation between Infosys news and price movements">
+                        Infosys Correlation
+                    </button>
+                    <button class="example-btn" data-query="Run backtest on Reliance with sentiment signals">
+                        Reliance Backtest
+                    </button>
+                    <button class="example-btn" data-query="What's the sentiment analysis for HDFC Bank?">
+                        HDFC Sentiment
+                    </button>
+                    <button class="example-btn" data-query="Compare Wipro news impact on stock price">
+                        Wipro Impact
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legacy Manual Input (Collapsible) -->
+        <div class="manual-section">
+            <button id="toggleManualInput" class="toggle-btn">
+                <span>⚙️ Manual Input (Advanced)</span>
+                <span id="toggleIcon">▼</span>
+            </button>
+            <div id="manualInputSection" class="manual-inputs hidden">
+                <div class="input-group">
+                    <label class="input-label">Stock Symbol</label>
+                    <input 
+                        type="text" 
+                        id="stockSymbol" 
+                        placeholder="e.g., TCS.NS, INFY.NS, RELIANCE.NS, HDFCBANK.NS" 
+                        class="form-input"
+                    >
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Timeframe</label>
+                    <select id="timeframe" class="form-select">
+                        <option value="1m">1 Minute</option>
+                        <option value="5m">5 Minutes</option>
+                        <option value="15m">15 Minutes</option>
+                        <option value="1h" selected>1 Hour</option>
+                        <option value="1d">1 Day</option>
+                    </select>
+                </div>
+
+                <button id="legacyAnalyzeBtn" class="btn btn-secondary">
+                    Run Legacy Analysis
+                </button>
+            </div>
+        </div>
+
+        <!-- Status Section -->
+        <div id="statusSection" class="status-section hidden">
+            <div class="status-content">
+                <div class="spinner"></div>
+                <span id="statusText">Initializing analysis...</span>
+            </div>
+            <div class="progress-bar">
+                <div id="progressBar" class="progress-fill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="results-section hidden">
+            <!-- Summary Cards -->
+            <div class="section-header">
+                <h3 class="section-title">📊 Analysis Summary</h3>
+                <div class="summary-grid">
+                    <div class="summary-card green">
+                        <div class="card-label green">Win Rate</div>
+                        <div id="winRate" class="card-value green">--</div>
+                    </div>
+                    <div class="summary-card blue">
+                        <div class="card-label blue">Sharpe Ratio</div>
+                        <div id="sharpeRatio" class="card-value blue">--</div>
+                    </div>
+                    <div class="summary-card purple">
+                        <div class="card-label purple">Total PnL</div>
+                        <div id="totalPnL" class="card-value purple">--</div>
+                    </div>
+                    <div class="summary-card orange">
+                        <div class="card-label orange">Correlation</div>
+                        <div id="correlation" class="card-value orange">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="chart-section">
+                <h3 class="section-title">📈 Price & Sentiment Timeline</h3>
+                <canvas id="priceChart" width="400" height="200"></canvas>
+            </div>
+
+            <!-- Strategy Recommendation -->
+            <div class="section-header">
+                <h3 class="section-title">💡 AI Analysis Results</h3>
+                <div id="strategyRecommendation" class="summary-card blue">
+                    <!-- Recommendation will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Section -->
+        <div id="errorSection" class="error-section hidden">
+            <div class="error-header">
+                <span>⚠️</span>
+                <span class="error-title">Analysis Failed</span>
+            </div>
+            <div id="errorMessage" class="error-message"></div>
+            <button id="retryBtn" class="btn btn-error">
+                🔄 Retry Analysis
+            </button>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

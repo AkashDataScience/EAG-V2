@@ -1,0 +1,27 @@
+{
+    "manifest_version": 3,
+    "name": "Stock News + Price Correlator",
+    "version": "1.0.0",
+    "description": "Analyze correlations between stock news sentiment and price movements with AI-powered insights",
+    "permissions": [
+        "activeTab",
+        "storage"
+    ],
+    "host_permissions": [
+        "http://localhost:5000/*",
+        "https://finance.yahoo.com/*",
+        "https://api.news.com/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "Stock News + Price Correlator"
+    },
+    "icons": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    }
+}

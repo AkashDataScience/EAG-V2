@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Backend</title>
+</head>
+<body>
+    <h1>Backend Test</h1>
+    <button onclick="testHealth()">Test Health</button>
+    <button onclick="testAnalyze()">Test Analyze</button>
+    <div id="result"></div>
+
+    <script>
+        async function testHealth() {
+            try {
+                const response = await fetch('http://localhost:5000/api/health');
+                const data = await response.json();
+                document.getElementById('result').innerHTML = `<pre>Health: ${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<pre>Health Error: ${error.message}</pre>`;
+            }
+        }
+
+        async function testAnalyze() {
+            try {
+                document.getElementById('result').innerHTML = '<p>Testing analyze endpoint...</p>';
+                
+                const response = await fetch('http://localhost:5000/api/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        query: 'Analyze Tesla stock sentiment'
+                    })
+                });
+
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                document.getElementById('result').innerHTML = `<pre>Analyze: ${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<pre>Analyze Error: ${error.message}</pre>`;
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
