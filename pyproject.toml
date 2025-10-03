@@ -1,0 +1,12 @@
+[project]
+name = "eag-v2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "google-genai>=1.40.0",
+    "mcp[cli]>=1.15.0",
+    "pillow>=11.3.0",
+    "pywinauto>=0.6.9",
+]
