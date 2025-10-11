@@ -1,0 +1,7 @@
+google-genai>=1.40.0
+mcp[cli]>=1.15.0
+yfinance>=0.2.40
+requests>=2.32.0
+pandas>=2.2.0
+numpy>=1.26.0
+python-dotenv>=1.0.0
