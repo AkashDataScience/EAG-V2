@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Nexus",
+  "version": "1.0",
+  "description": "AI-powered video transcript analysis with semantic search",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "http://localhost:5000/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["css/*", "js/*"],
+      "matches": ["https://www.youtube.com/*"]
+    }
+  ]
+} 
