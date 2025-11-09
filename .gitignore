@@ -5,6 +5,8 @@ __pycache__/
 venv/
 *.egg-info/
 data/
+documents/
+faiss_index/
 
 # Node
 node_modules/
@@ -17,3 +19,6 @@ yarn-error.log
 # OS generated files
 .DS_Store
 Thumbs.db
+
+client_creds.json
+token.json

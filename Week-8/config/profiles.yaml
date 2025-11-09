@@ -1,0 +1,57 @@
+agent:
+  name: Synapse
+  id: synapse_001
+  description: >
+    A reasoning-driven AI agent capable of using external tools
+    and memory to solve complex tasks step-by-step.
+
+strategy:
+  type: conservative         # Options: conservative, retry_once, explore_all
+  max_steps: 20               # Maximum tool-use iterations before termination
+
+memory:
+  top_k: 3
+  type_filter: tool_output   # Options: tool_output, fact, query, all
+  embedding_model: nomic-embed-text
+  embedding_url: http://localhost:11434/api/embeddings
+
+llm:
+  text_generation: gemini
+  embedding: nomic
+
+persona:
+  tone: concise
+  verbosity: low
+  behavior_tags: [rational, focused, tool-using]
+
+mcp_servers:
+  - id: math
+    script: mcp_server_math.py
+    cwd: D:\Deep Learning\The school of AI\EAG V2\EAG V2\Week-8
+    transport: stdio
+  - id: documents
+    script: mcp_server_documents.py
+    cwd: D:\Deep Learning\The school of AI\EAG V2\EAG V2\Week-8
+    transport: sse
+    url: http://127.0.0.1:8000/sse
+  - id: websearch
+    script: mcp_server_websearch.py
+    cwd: D:\Deep Learning\The school of AI\EAG V2\EAG V2\Week-8
+    transport: stdio
+  - id: telegram
+    script: mcp_server_telegram.py
+    cwd: D:\Deep Learning\The school of AI\EAG V2\EAG V2\Week-8
+    transport: sse
+    url: http://127.0.0.1:8001/sse
+  - id: google_sheets
+    script: mcp_google_sheets/server.py
+    cwd: D:\Deep Learning\The school of AI\EAG V2\EAG V2\Week-8
+    transport: stdio
+  - id: google_drive
+    script: gdrive_mcp_server/server.py
+    cwd: D:\Deep Learning\The school of AI\EAG V2\EAG V2\Week-8
+    transport: stdio
+  - id: gmail
+    script: gmail/server.py
+    cwd: D:\Deep Learning\The school of AI\EAG V2\EAG V2\Week-8
+    transport: stdio
