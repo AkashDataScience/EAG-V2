@@ -7,6 +7,7 @@ venv/
 data/
 documents/
 faiss_index/
+memory/
 
 # Node
 node_modules/
@@ -20,5 +21,10 @@ yarn-error.log
 .DS_Store
 Thumbs.db
 
+# Draw.io backup files
+*.drawio.bkp
+*.drawio
+
 client_creds.json
 token.json
+historical_conversation_store.json

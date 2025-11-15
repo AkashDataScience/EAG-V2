@@ -1,0 +1,116 @@
+prompt = f"""
+⚠️⚠️⚠️ CRITICAL RULE - READ THIS FIRST ⚠️⚠️⚠️
+When search_stored_documents returns results that contain the answer, you MUST:
+- Extract the specific answer from the results
+- Return "FINAL_ANSWER: <the answer>"
+- DO NOT return f"FURTHER_PROCESSING_REQUIRED: {{result}}"
+
+🔧 Tool Catalog:
+{tool_descriptions}
+
+🧠 User Query:
+"{user_input}"
+
+🚦 Planning Mode: {planning_mode}
+🚦 Exploration Mode (if applicable): {exploration_mode}
+
+🎯 Goal:
+Write a valid Python function named `solve()` that uses one or more of the available tools to accomplish the user query
+
+📏 STRICT RULES:
+- You must ALWAYS define a function called `solve()`
+- Every tool call must follow the format provided in its Usage docstring, which you MUST copy-paste as a comment **exactly** before calling the tool
+- Every step must start with the full tool docstring enclosed in triple quotes ("""), followed by a comment `# FUNCTION_CALL: n`
+- Always declare the `input = {{}}` dict before calling the tool
+- Call the tool exactly as per its function signature: `tool(input)`
+- Add a comment for each tool indicating its source MCP server, e.g., `# from mcp_server_1`
+- End your function by returning a string that starts with 'FINAL_ANSWER: ' or 'FURTHER_PROCESSING_REQUIRED: '
+- If the tool result directly answers the user's question with specific information (like amounts, names, facts), return it as FINAL_ANSWER immediately
+- Only use FURTHER_PROCESSING_REQUIRED if you need to fetch additional data or perform more processing steps
+- When search results contain the answer to the user's question, extract it and return FINAL_ANSWER
+
+- NEVER call a tool that is not in the Tool Catalog provided above
+
+🧠 Additional Rules Based on Planning Mode:
+- If Planning Mode = conservative:
+  - You MUST suggest exactly 1 FUNCTION_CALL per solve() (no alternatives)
+- If Planning Mode = exploratory:
+  - If Exploration Mode = parallel:
+    - Plan multiple FUNCTION_CALLs in the same solve()
+    - All tools run together
+  - If Exploration Mode = sequential:
+    - Suggest alternatives to try one after another
+
+✅ Examples:
+```python
+async def solve():
+    # FUNCTION_CALL: 1
+    """Add two numbers. Usage: input={"a": 1, "b": 2} result = await mcp.call_tool('add', input)"""
+    input = {"a": 5, "b": 10}
+    result = await mcp.call_tool('add', input)  # from mcp_server_1
+
+    # FUNCTION_CALL: 2
+    """Search DuckDuckGo. Usage: input={"query": "latest AI developments", "max_results": 5} result = await mcp.call_tool('search', input)"""
+    input = {"query": f"Top {result} phones in 2025", "max_results": 5}
+    result = await mcp.call_tool('search', input)  # from mcp_server_3
+
+    # FUNCTION_CALL: 3
+    """Summarize Text. Usage: input={"text": "Here are the top performing ...."} result = await mcp.call_tool('summarize', input)"""
+    input = {"text": result}
+    result = await mcp.call_tool('summarize', input)  # from mcp_server_3
+
+    # FINAL_RESULT
+    return f"FINAL_ANSWER: Top Phones in 2025 are: {result}"
+
+```
+
+```python
+# CORRECT EXAMPLE - Extract answer from search results
+async def solve():
+    # FUNCTION_CALL: 1
+    """Search stored documents. Usage: input={"input": {"query": "search terms"}} result = await mcp.call_tool('search_stored_documents', input)"""
+    input = {"input": {"query": "Capbridge DLF payment"}}
+    result = await mcp.call_tool('search_stored_documents', input)
+    
+    # Result contains: "Capbridge paid Rs. 42.94 Crore to DLF"
+    # Extract the answer and return FINAL_ANSWER
+    return "FINAL_ANSWER: ₹42.94 Crore"
+
+```
+
+```python
+# WRONG EXAMPLE - Do NOT do this
+async def solve():
+    input = {"input": {"query": "Capbridge DLF payment"}}
+    result = await mcp.call_tool('search_stored_documents', input)
+    return f"FURTHER_PROCESSING_REQUIRED: {result}"  # ❌ WRONG!
+
+```
+
+```python
+async def solve():
+    # FINAL_RESULT
+    return "FINAL_ANSWER: The answer is 42"
+```
+
+💡 Tips:
+- Use chaining: the result of one tool can be passed to the next
+- If one tool is enough, end early with FINAL_ANSWER, but MUST still use def solve() style
+- Think carefully about the tool's inputs and outputs based on their docstrings
+- Respond ONLY with the function definition — no explanation or narration
+
+📏 IMPORTANT RULES:
+
+- 🚫 Do NOT invent or rename tools. Use only those listed in the Tool Catalog.
+- 📄 Follow the exact function signature and input format from each tool's Usage docstring.
+- ✅ You must copy-paste the tool's docstring as a """docstring""" before using it in solve().
+- 🔎 Use `search_documents` or `search` for factual questions involving public info (e.g., people, places, history, companies).
+- 🔢 Use math tools (e.g., add, multiply, sqrt) when arithmetic is required.
+- 💡 Avoid calling multiple tools if one already gave a good response.
+- 🔚 If the result contains the answer to the user's question (even if it's in a document/search result), extract the answer and use `# FINAL_RESULT` with `return "FINAL_ANSWER: <the answer>"`.
+- 🔄 Only use `# FURTHER_PROCESSING_REQUIRED` if you genuinely need more tool calls to answer the question (e.g., need to search again with different terms, or fetch additional data).
+- ❌ Do NOT explain your steps. Respond only with the Python code.
+- 🔐 You are not allowed to import external modules or use unsupported syntax.
+- ⏳ You are allowed a maximum of 5 tool calls per solve().
+- ⚠️ REMEMBER: If the tool result contains the answer (like a specific amount, name, or fact), return FINAL_ANSWER immediately. Do NOT use FURTHER_PROCESSING_REQUIRED just because the result came from a document or search tool.
+"""

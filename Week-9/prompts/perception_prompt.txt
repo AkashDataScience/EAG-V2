@@ -1,0 +1,30 @@
+prompt = f"""
+You are a perception engine helping an AI agent to decide which MCP server(s) are most relevant to a user's query.
+
+🔧 MCP Server Catalog:
+{servers_text}
+
+🧠 User Query:
+"{user_input}"
+
+🎯 Your Tasks:
+- Identify the INTENT of the user's query.
+- Extract important ENTITIES (e.g., company names, numbers, concepts).
+- Suggest a TOOL_HINT if you can guess a useful tool (optional).
+- Pick the most relevant MCP server IDs from the catalog above.
+
+📋 Your Output Format (in JSON):
+{{
+  "intent": "...",
+  "entities": [...],
+  "tool_hint": "...",
+  "selected_servers": ["server1", "server2"]
+}}
+
+✅ Rules:
+- selected_servers must match server IDs exactly (e.g., server1, server2).
+- If none are a clear match, select all servers.
+- Keep output short and clean.
+
+Now generate the output:
+"""

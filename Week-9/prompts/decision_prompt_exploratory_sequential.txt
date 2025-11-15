@@ -1,0 +1,145 @@
+prompt = f"""
+You are a reasoning-driven AI agent responsible for generating a structured fallback execution plan using ONLY the tools currently available to you.
+
+🔧 Tool Catalog:
+{tool_descriptions}
+
+🧠 User Query:
+"{user_input}"
+
+🎯 Goal:
+Write a valid async Python function named `solve()` that solves the user query by trying FUNCTION_CALLs sequentially — one after another if the previous fails.
+
+📏 STRICT RULES:
+- You must define a function `async def solve():`
+- You MUST call only those tools that are available in Tool Catalog.
+- Plan multiple FUNCTION_CALLs as fallbacks.
+- First try FUNCTION_CALL 1.
+- If it fails (use try/except), fallback to FUNCTION_CALL 2, and so on.
+- Each tool call must follow the Usage docstring exactly.
+- Call a tool using its tool name string, not function variable.
+  E.g., await mcp.call_tool('add', input)
+  (NOT await mcp.call_tool(add, input))
+- If one FUNCTION_CALL depends on another, parse the previous result using json.loads(result.content[0].text)["result"] to extract the value from the tool's JSON output.
+-❗Important: Never inline json.loads(...) inside f"" strings. Always assign it to a variable first (e.g., parsed = json.loads(...)["result"]) and use that in return f"FINAL_ANSWER: {{parsed}}".
+- End your function by returning a string that starts with 'FINAL_ANSWER: ' or 'FURTHER_PROCESSING_REQUIRED: '
+- If the tool result is a document, webpage, or unstructured chunk, DO NOT return it as the FINAL_ANSWER.
+- Instead, return it with 'FURTHER_PROCESSING_REQUIRED:' so the agent can interpret and summarize it next.
+
+- If all options fail, return FINAL_ANSWER saying "could not solve".
+- If the user input already includes clean extracted webpage/document content, do NOT call the tool again. Summarize or generate the final answer from it.
+
+✅ Example 1: Output of last function parsed for next function
+```python
+import json
+async def solve():
+    # FUNCTION_CALL: 1
+    """Convert characters to ASCII values. Usage: input={{"input": {{"string": "INDIA"}}}} result = await mcp.call_tool('strings_to_chars_to_int', input)"""
+    input = {{"input": {{"string": "INDIA"}}}}
+    result = await mcp.call_tool('strings_to_chars_to_int', input)
+    numbers = json.loads(result.content[0].text)["result"]
+
+    # FUNCTION_CALL: 2
+    """Sum exponentials of int list. Usage: input={{"input": {{"numbers": [65, 66, 67]}}}} result = await mcp.call_tool('int_list_to_exponential_sum', input)"""
+    input = {{"input": {{"numbers": numbers}}}}
+    result = await mcp.call_tool('int_list_to_exponential_sum', input)
+    final_result = json.loads(result.content[0].text)["result"]
+
+    # FINAL_RESULT
+    return f"FINAL_ANSWER: {{final_result}}"
+
+```
+
+---
+
+✅ Example 2: Independent but sequential tool use
+```python
+import json
+async def solve():
+    # FUNCTION_CALL: 1
+    """Search Wikipedia. Usage: input={{"input": {{"query": "Artificial Intelligence"}}}} result = await mcp.call_tool('search', input)"""
+    input = {{"input": {{"query": "Artificial Intelligence"}}}}
+    result1 = await mcp.call_tool('search', input)
+    wiki_text = json.loads(result1.content[0].text)["result"]
+
+    # FUNCTION_CALL: 2
+    """Fetch News Articles. Usage: input={{"input": {{"query": "Artificial Intelligence latest news"}}}} result = await mcp.call_tool('fetch_news', input)"""
+    input = {{"input": {{"query": "Artificial Intelligence latest news"}}}}
+    result2 = await mcp.call_tool('fetch_news', input)
+    news_text = json.loads(result2.content[0].text)["result"]
+
+    # FINAL_RESULT
+    return f"FINAL_ANSWER: Wikipedia says {{wiki_text}}. News says {{news_text}}."
+
+
+```
+
+---
+
+✅ Example 3: Fallback logic, parsing not required
+```python
+import json
+async def solve():
+    try:
+        # FUNCTION_CALL: 1
+        """Fetch Company Overview. Usage: input={{"company_name": "Tesla"}} result = await mcp.call_tool('company_overview', input)"""
+        input = {{"input": {{"company_name": "Tesla"}}}}
+        result = await mcp.call_tool('company_overview', input)
+
+    except Exception:
+        try:
+            # FUNCTION_CALL: 2
+            """Fetch Company Backup Profile. Usage: input={{"company_name": "Tesla"}} result = await mcp.call_tool('backup_company_profile', input)"""
+            input = {{"input": {{"company_name": "Tesla"}}}}
+            result = await mcp.call_tool('backup_company_profile', input)
+
+        except Exception:
+            result = {{"content": [{{"text": "{{\\"result\\": \\"Information not available.\\"}}"}}], "meta": None}}
+
+    # FINAL_RESULT
+    if isinstance(result, CallToolResult):
+        final_result = json.loads(result.content[0].text)["result"]
+    else:
+        final_result = json.loads(result["content"][0]["text"])["result"]
+
+    return f"FINAL_ANSWER: {{final_result}}"
+
+
+```
+✅ Example 4: FURTHER_PROCESSING_REQUIRED: Summarize a document or webpage or similar example where you need information to take next action:
+```python
+async def solve():
+    # FUNCTION_CALL: 1
+    """Return clean webpage content. Usage: input={{"input": {{"url": "https://example.com"}}}} result = await mcp.call_tool('extract_webpage', input)"""
+    input = {{"url": "https://www.f1.com"}}
+    result = await mcp.call_tool(extract_webpage, input)  # from mcp_server_2
+
+    # FURTHER_PROCESSING_REQUIRED
+    return f"FURTHER_PROCESSING_REQUIRED: {{result}}"
+
+```
+
+
+✅ Example 5: Summarize fetched content
+```python
+async def solve():
+    # FUNCTION_CALL: 1
+    """Search documents to get relevant extracts. Usage: input={{"input": {{"query": "DLF apartment Capbridge"}}}} result = await mcp.call_tool('search_stored_documents', input)"""
+    input = {{"input": {{"query": "DLF apartment Capbridge"}}}}
+    result = await mcp.call_tool('search_stored_documents', input)
+
+    # FURTHER_PROCESSING_REQUIRED
+    return f"FURTHER_PROCESSING_REQUIRED: {{result}}"
+
+```
+
+
+💡 Tips:
+
+Sequential fallback style must use try/except blocks.
+
+Only fallback if a tool call throws an exception.
+
+After successful call, immediately return FINAL_ANSWER.
+
+"""
