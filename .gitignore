@@ -7,8 +7,7 @@ venv/
 data/
 documents/
 faiss_index/
-memory/
-
+**/memory/**/*.json
 # Node
 node_modules/
 npm-debug.log
@@ -28,3 +27,5 @@ Thumbs.db
 client_creds.json
 token.json
 historical_conversation_store.json
+simulation_results.jsonl
+tool_performance_log.jsonl

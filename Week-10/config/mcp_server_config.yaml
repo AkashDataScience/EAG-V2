@@ -1,0 +1,21 @@
+mcp_servers:
+  - id: math
+    script: mcp_math_tools.py
+    cwd: D:\Deep Learning\The school of AI\EAG V2\EAG V2\Week-10\mcp_servers
+    description: "Most used Math tools, including special string-int conversions, fibonacci, python sandbox, shell and sql related tools"
+    capabilities: ["add", "subtract", "multiply", "divide", "power", "cbrt", "factorial", "remainder", "sin", "cos", "tan", "mine", "create_thumbnail", "strings_to_chars_to_int", "int_list_to_exponential_sum", "fibonacci_numbers"]
+  - id: documents
+    script: mcp_document_tools.py
+    cwd: D:\Deep Learning\The school of AI\EAG V2\EAG V2\Week-10\mcp_servers
+    description: "Load, search and extract within webpages, local PDFs or other documents. Web and document specialist"
+    capabilities: ["search_stored_documents_rag", "convert_webpage_url_into_markdown", "extract_pdf"]
+  - id: websearch
+    script: mcp_websearch_tools.py
+    cwd: D:\Deep Learning\The school of AI\EAG V2\EAG V2\Week-10\mcp_servers
+    description: "Webtools to search internet for queries and fetch content for a specific web page"
+    capabilities: ["duckduckgo_search_results", "download_raw_html_from_url"]
+  - id: mixed
+    script: mcp_mixed_tools.py
+    cwd: D:\Deep Learning\The school of AI\EAG V2\EAG V2\Week-10\mcp_servers
+    description: "Most used Math tools"
+    capabilities: ["add", "subtract", "multiply", "divide"]

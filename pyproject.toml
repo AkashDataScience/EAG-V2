@@ -30,4 +30,5 @@ dependencies = [
     "fastapi>=0.121.0",
     "google-auth-oauthlib>=1.2.3",
     "google-api-python-client>=2.187.0",
+    "rapidfuzz>=3.14.3",
 ]
